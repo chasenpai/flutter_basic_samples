@@ -64,6 +64,7 @@ class GridViewScreen extends StatelessWidget {
         // crossAxisSpacing: 12.0,
         // mainAxisSpacing: 12.0,
       ),
+      itemCount: 100,
       itemBuilder: (context, index) {
         return renderContainer(
           color: rainbowColors[index % rainbowColors.length],
