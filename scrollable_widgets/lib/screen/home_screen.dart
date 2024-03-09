@@ -4,6 +4,7 @@ import 'package:scrollable_widgets/screen/custom_scroll_view_screen.dart';
 import 'package:scrollable_widgets/screen/grid_view_screen.dart';
 import 'package:scrollable_widgets/screen/list_view_screen.dart';
 import 'package:scrollable_widgets/screen/reorderable_list_view_screen.dart';
+import 'package:scrollable_widgets/screen/scroll_bar_screen.dart';
 import 'package:scrollable_widgets/screen/single_child_scroll_view_screen.dart';
 
 class ScreenModel {
@@ -38,6 +39,10 @@ class HomeScreen extends StatelessWidget {
     ScreenModel(
       builder: (_) => CustomScrollViewScreen(),
       name: 'CustomScrollViewScreen',
+    ),
+    ScreenModel(
+      builder: (_) => ScrollBarScreen(),
+      name: 'ScrollBarScreen',
     ),
   ];
 
