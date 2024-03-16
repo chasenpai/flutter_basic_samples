@@ -8,11 +8,13 @@ class MainAppBar extends StatelessWidget {
 
   final StatusModel status; //StatModel을 기준으로 단계를 나누는 것을 정의
   final StatModel stat;
+  final String region;
 
   const MainAppBar({
     super.key,
     required this.status,
-    required this.stat
+    required this.stat,
+    required this.region,
   });
 
   @override
@@ -33,7 +35,7 @@ class MainAppBar extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  '서울',
+                  region,
                   style: textStyle.copyWith(
                     fontSize: 40.0,
                     fontWeight: FontWeight.w700,

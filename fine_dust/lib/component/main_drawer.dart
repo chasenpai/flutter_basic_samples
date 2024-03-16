@@ -1,26 +1,19 @@
 import 'package:fine_dust/const/colors.dart';
+import 'package:fine_dust/const/regions.dart';
 import 'package:flutter/material.dart';
 
-const regions = [
-  '서울',
-  '경기',
-  '대구',
-  '서울',
-  '경기',
-  '대구',
-  '서울',
-  '경기',
-  '대구',
-  '서울',
-  '경기',
-  '대구',
-  '서울',
-  '경기',
-  '대구',
-];
+typedef OnRegionTap = void Function(String region);
 
 class MainDrawer extends StatelessWidget {
-  const MainDrawer({super.key});
+
+  final OnRegionTap onRegionTap;
+  final String selectedRegion;
+
+  const MainDrawer({
+    super.key,
+    required this.onRegionTap,
+    required this.selectedRegion,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +37,12 @@ class MainDrawer extends StatelessWidget {
           ...regions.map((e) =>
             ListTile( //꼭 ListView안에 써야하는건 아니지만 ListView안에서 써야 예쁘게 나오도록 설계되어있음
               onTap: () {
-
+                onRegionTap(e);
               },
               tileColor: Colors.white,
               selectedTileColor: lightColor, //선택된 타일 색상
               selectedColor: Colors.black, //선택된 타일의 글자 색상
-              selected: e == '서울', //선택 상태 조절 가능
+              selected: e == selectedRegion, //선택 상태 조절 가능
               title: Text(
                 e,
               ),
