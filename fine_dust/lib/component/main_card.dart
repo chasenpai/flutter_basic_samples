@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 
 class MainCard extends StatelessWidget {
 
+  final Color backgroundColor;
   final Widget child;
 
   const MainCard({
     required this.child,
+    required this.backgroundColor,
     super.key
   });
 
@@ -15,7 +17,7 @@ class MainCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         margin: EdgeInsets.symmetric(horizontal: 8.0),
-        color: lightColor,
+        color: backgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(16.0),

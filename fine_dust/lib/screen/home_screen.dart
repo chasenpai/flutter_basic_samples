@@ -4,6 +4,7 @@ import 'package:fine_dust/component/main_app_bar.dart';
 import 'package:fine_dust/component/main_drawer.dart';
 import 'package:fine_dust/const/colors.dart';
 import 'package:fine_dust/const/regions.dart';
+import 'package:fine_dust/model/stat_and_status_model.dart';
 import 'package:fine_dust/model/stat_model.dart';
 import 'package:fine_dust/repository/stat_repository.dart';
 import 'package:fine_dust/utils/data_utils.dart';
@@ -49,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColor,
       drawer: MainDrawer(
         onRegionTap: (String region) {
           setState(() {
@@ -76,28 +76,63 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           Map<ItemCode, List<StatModel>> stats = snapshot.data!;
           StatModel pm10RecentStat = stats[ItemCode.PM10]![0];
+          //미세먼지 최근 데이터의 현재 상태
           final status = DataUtils.getStatusFromItemCodeAndValue(
             value: pm10RecentStat.seoul,
             itemCode: ItemCode.PM10,
           );
-          return CustomScrollView(
-            slivers: [
-              MainAppBar(
-                region: region,
-                stat: pm10RecentStat,
-                status: status,
-              ),
-              SliverToBoxAdapter( //Sliver안에 일반 위젯을 넣을 수 있음
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    CategoryCard(),
-                    const SizedBox(height: 16.0,),
-                    HourlyCard(),
-                  ],
+          final ssModel = stats.keys.map((key) {
+            final value = stats[key]!;
+            final stat = value[0];
+            return StatAndStatusModel(
+                itemCode: key,
+                status: DataUtils.getStatusFromItemCodeAndValue(
+                  value: stat.getLevelFromRegion(region),
+                  itemCode: key,
                 ),
-              ),
-            ],
+                stat: stat,
+            );
+          }).toList();
+          return Container(
+            //Scaffold에 배경을 주지 않고 상태가 변경될 때 마다 배경 색이 바뀌도록
+            color: status.primaryColor,
+            child: CustomScrollView(
+              slivers: [
+                MainAppBar(
+                  region: region,
+                  stat: pm10RecentStat,
+                  status: status,
+                ),
+                SliverToBoxAdapter( //Sliver안에 일반 위젯을 넣을 수 있음
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      CategoryCard(
+                        region: region,
+                        models: ssModel,
+                        darkColor: status.darkColor,
+                        lightColor: status.lightColor,
+                      ),
+                      const SizedBox(height: 16.0,),
+                      ...stats.keys.map((itemCode) {
+                        final stat = stats[itemCode]!;
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: HourlyCard(
+                            stats: stat,
+                            category: DataUtils.getItemCodeKrString(itemCode: itemCode),
+                            region: region,
+                            darkColor: status.darkColor,
+                            lightColor: status.lightColor,
+                          ),
+                        );
+                      }),
+                      const SizedBox(height: 32.0,),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
         }
       ),
