@@ -9,12 +9,14 @@ class MainAppBar extends StatelessWidget {
   final StatusModel status; //StatModel을 기준으로 단계를 나누는 것을 정의
   final StatModel stat;
   final String region;
+  final bool isExpanded;
 
   const MainAppBar({
     super.key,
     required this.status,
     required this.stat,
     required this.region,
+    required this.isExpanded,
   });
 
   @override
@@ -27,6 +29,15 @@ class MainAppBar extends StatelessWidget {
 
     return SliverAppBar(
       backgroundColor: status.primaryColor,
+      iconTheme: IconThemeData(color: Colors.white),
+      pinned: true,
+      title: isExpanded ? null : Text(
+        '$region ${DataUtils.getTimeFromDateTime(dateTime: stat.dataTime)}',
+        style: textStyle.copyWith(
+          fontSize: 24.0,
+        ),
+      ),
+      centerTitle: true,
       expandedHeight: 500,
       flexibleSpace: FlexibleSpaceBar(
         background: SafeArea(
